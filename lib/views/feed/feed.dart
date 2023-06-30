@@ -2,11 +2,13 @@ import 'package:evika/auth/signup.dart';
 import 'package:evika/utils/constants.dart';
 import 'package:evika/utils/user_functionality.dart';
 import 'package:evika/utils/widgets/login_first_dialogbox.dart';
+import 'package:evika/utils/widgets/sidebar_comment_section.dart';
 import 'package:evika/view_models/common_viewmodel.dart';
 import 'package:evika/view_models/home_viewmodel.dart/post_viewmodel.dart';
 import 'package:evika/view_models/navigation.dart/navigation_viewmodel.dart';
 import 'package:evika/views/chat_view/chart_view_home.dart';
 import 'package:evika/views/home.dart';
+import 'package:evika/views/settings/setting_Screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,11 +27,13 @@ class FeedView extends StatelessWidget {
           body: NestedScrollView(
               headerSliverBuilder: (context, value) {
                 return [
-                  Get.width > Constants.webWidth
+                  width > Constants.webWidth
                       ? const SliverAppBar(
                           toolbarHeight: 0,
                         )
                       : SliverAppBar(
+                          // toolbarHeight:
+                          // Get.width > Constants.webWidth ? 200 : 0,
                           pinned: true,
                           floating: true,
                           backgroundColor: Colors.white,
@@ -51,15 +55,12 @@ class FeedView extends StatelessWidget {
                                   color: Colors.grey.shade800),
                             ),
                           ],
-                          bottom: Get.width > Constants.webWidth
-                              ? PreferredSize(
-                                  preferredSize: const Size(500, 40),
-                                  child: Suggessions(),
-                                )
-                              : PreferredSize(
-                                  preferredSize: Size(Get.width, 40),
-                                  child: Suggessions(),
-                                ),
+                          bottom: PreferredSize(
+                            preferredSize: Size(Get.width, 40),
+                            child: Suggessions(
+                              width: width,
+                            ),
+                          ),
                         ),
                 ];
               },
@@ -94,8 +95,9 @@ class FeedView extends StatelessWidget {
                                       : width - Constants.sizeBarWidth,
                               child: Center(
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical:
+                                          width > Constants.webWidth ? 5 : 20),
                                   width: Get.width < Constants.mwidth
                                       ? width
                                       : 560,
@@ -107,205 +109,11 @@ class FeedView extends StatelessWidget {
                             ),
                             (!vm.showWebCommentSection || width < 1260)
                                 ? const SizedBox()
-                                : SizedBox(
-                                    width: Constants.commentSectionWidth,
-                                    child: commonVM.isLoading
-                                        ? ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              minHeight: height,
-                                              minWidth:
-                                                  width < Constants.webWidth
-                                                      ? width
-                                                      : Constants
-                                                          .commentSectionWidth,
-                                            ),
-                                            child: const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                          )
-                                        : Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 20.0),
-                                                child: TextFormFieldContainer(
-                                                    width: Get.width <
-                                                            Constants.webWidth
-                                                        ? width - 20
-                                                        : Constants
-                                                                .commentSectionWidth -
-                                                            20,
-                                                    icon: Icons.add_reaction,
-                                                    hintText: "Add Comment",
-                                                    function: () {},
-                                                    controller:
-                                                        vm.commentController,
-                                                    isMobileNumber: false,
-                                                    suffix: InkWell(
-                                                      onTap: () async {
-                                                        if (!await UserFunctions
-                                                            .isUserLoggedInFun()) {
-                                                          loginFirstDialog(
-                                                              context);
-                                                          return;
-                                                        }
-                                                        commonVM.addComment(
-                                                            vm
-                                                                .postList[vm
-                                                                    .selectedPostForComment]
-                                                                .id!,
-                                                            vm.commentController
-                                                                .text
-                                                                .trim());
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.send,
-                                                        color: Colors.blue,
-                                                      ),
-                                                    )),
-                                              ),
-                                              Container(
-                                                  height: height - 200,
-                                                  width: Constants
-                                                      .commentSectionWidth,
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(20),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      20))),
-                                                  child: !commonVM.isLoading
-                                                      ? ListView.builder(
-                                                          physics:
-                                                              const BouncingScrollPhysics(),
-                                                          itemCount: commonVM
-                                                                  .commentList
-                                                                  .isEmpty
-                                                              ? 1
-                                                              : commonVM
-                                                                  .commentList
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index) {
-                                                            return commonVM
-                                                                    .commentList
-                                                                    .isNotEmpty
-                                                                ? Container(
-                                                                    margin: const EdgeInsets
-                                                                            .symmetric(
-                                                                        vertical:
-                                                                            10,
-                                                                        horizontal:
-                                                                            10),
-                                                                    child: Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .start,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          CircleAvatar(
-                                                                            radius:
-                                                                                25,
-                                                                            backgroundImage:
-                                                                                NetworkImage(commonVM.commentList[index].userImage),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          GestureDetector(
-                                                                            onLongPress:
-                                                                                () {
-                                                                              showDialog(
-                                                                                  context: context,
-                                                                                  builder: (context) {
-                                                                                    return AlertDialog(
-                                                                                      content: const Text("Do you want to delete this comment?"),
-                                                                                      actions: [
-                                                                                        TextButton(
-                                                                                            onPressed: () {
-                                                                                              Navigator.pop(context);
-                                                                                            },
-                                                                                            child: const Text("No")),
-                                                                                        TextButton(
-                                                                                            onPressed: () {
-                                                                                              commonVM.commentFuntionality(commonVM.commentList[index].postId, "delete", commonVM.commentList[index].id);
-                                                                                              Navigator.pop(context);
-                                                                                            },
-                                                                                            child: const Text("Yes")),
-                                                                                      ],
-                                                                                    );
-                                                                                  });
-                                                                            },
-                                                                            child: SizedBox(
-                                                                                width: Get.width < Constants.webWidth ? width - 80 : Constants.commentSectionWidth - 80,
-                                                                                child: Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      commonVM.commentList[index].username,
-                                                                                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                                                                                    ),
-                                                                                    RichText(
-                                                                                        text: TextSpan(
-                                                                                      text: commonVM.commentList[index].text,
-                                                                                      style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w400),
-                                                                                    )),
-                                                                                    Row(
-                                                                                      children: [
-                                                                                        TextButton.icon(
-                                                                                            label: Text("${commonVM.commentList[index].likes}"),
-                                                                                            onPressed: () {
-                                                                                              commonVM.commentFuntionality(commonVM.commentList[index].postId, "likes", commonVM.commentList[index].id);
-                                                                                            },
-                                                                                            icon: Icon(
-                                                                                              Icons.thumb_up,
-                                                                                              color: Colors.grey.shade600,
-                                                                                              size: 20,
-                                                                                            )),
-                                                                                        TextButton(onPressed: () {}, child: const Text("Reply")),
-                                                                                      ],
-                                                                                    ),
-                                                                                    index == commonVM.commentList.length - 1
-                                                                                        ? const SizedBox(
-                                                                                            height: 40,
-                                                                                          )
-                                                                                        : const SizedBox()
-                                                                                  ],
-                                                                                )),
-                                                                          )
-                                                                        ]),
-                                                                  )
-                                                                : const Text(
-                                                                    "No Comments",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          20,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                    ),
-                                                                  );
-                                                          },
-                                                        )
-                                                      : const Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            color: Colors.blue,
-                                                          ),
-                                                        )),
-                                            ],
-                                          ),
-                                  )
+                                : SiedBarCommentSection(
+                                    height: height,
+                                    width: width,
+                                    vm: vm,
+                                    commonVM: commonVM)
                           ],
                         ),
                       )
@@ -426,8 +234,17 @@ class WebSideBarWidget extends StatelessWidget {
           child: WebSideBar(
               title: 'Chat', icon: CupertinoIcons.chat_bubble_2_fill),
         ),
-        WebSideBar(title: 'Create', icon: CupertinoIcons.add_circled_solid),
-        WebSideBar(title: 'Settings', icon: Icons.settings),
+        InkWell(
+            onTap: () {
+              nv.changeIndex(2);
+            },
+            child: WebSideBar(
+                title: 'Create', icon: CupertinoIcons.add_circled_solid)),
+        InkWell(
+            onTap: () {
+              Get.to(() => SettingScreen());
+            },
+            child: WebSideBar(title: 'Settings', icon: Icons.settings)),
       ]),
     );
   }
