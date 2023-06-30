@@ -35,7 +35,7 @@ class PostVM extends GetxController {
   String? userId;
   String checkBase = "Post View Model: ";
   bool showWebCommentSection = false;
-  int selectedPostForComment = 0;
+  int selectedPostForComment = -1;
   ScrollController commentScrollController = ScrollController();
 
   logout() async {

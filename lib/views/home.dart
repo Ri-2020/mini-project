@@ -170,9 +170,12 @@ class _HomePageState extends State<HomePage> {
                                         bottomModelWebCommentWidget(
                                             context, vm, i, width, height);
                                       } else {
+                                        if (vm.selectedPostForComment == i &&
+                                            vm.showWebCommentSection == true) {
+                                          return;
+                                        }
+                                        vm.showWebCommentSection = true;
                                         vm.selectedPostForComment = i;
-                                        vm.showWebCommentSection =
-                                            !vm.showWebCommentSection;
 
                                         vm.update();
                                       }

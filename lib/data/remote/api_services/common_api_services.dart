@@ -40,7 +40,7 @@ class CommonApiServices extends CommoApiInterface {
   @override
   Future<List>? getAndAddComments(String postId, String? text) async {
     String token = await getToken();
-    // print("token : $token");
+    print("token : $token");
     final response;
     if (text == null) {
       response = await http.get(
@@ -80,7 +80,7 @@ class CommonApiServices extends CommoApiInterface {
       Map<String, dynamic> res = jsonDecode(response.body);
       comments = res["data"];
 
-      // print("get comment : $comments");
+      print("get comment : $comments");
       return comments;
     }
     return [];
