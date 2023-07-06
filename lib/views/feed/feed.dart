@@ -21,156 +21,186 @@ class FeedView extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GetBuilder<PostVM>(builder: (vm) {
-      return GetBuilder<CommonVM>(builder: (commonVM) {
-        return Scaffold(
-          body: NestedScrollView(
-              headerSliverBuilder: (context, value) {
-                return [
-                  width > Constants.webWidth
-                      ? const SliverAppBar(
-                          toolbarHeight: 0,
-                        )
-                      : SliverAppBar(
-                          // toolbarHeight:
-                          // Get.width > Constants.webWidth ? 200 : 0,
-                          pinned: true,
-                          floating: true,
-                          backgroundColor: Colors.white,
-                          elevation: 0,
-                          title: const Text(
-                            "Feeds",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          actions: [
-                            IconButton(
-                              onPressed: () async {
-                                if (!await UserFunctions.isUserLoggedInFun()) {
-                                  loginFirstDialog(context);
-                                  return;
-                                }
-                                Get.to(const ChatHomeView());
-                              },
-                              icon: Icon(CupertinoIcons.chat_bubble_2_fill,
-                                  color: Colors.grey.shade800),
+    return GetBuilder<PostVM>(
+      builder: (vm) {
+        return GetBuilder<CommonVM>(
+          builder: (commonVM) {
+            return Scaffold(
+              body: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    width > Constants.webWidth
+                        ? const SliverAppBar(
+                            toolbarHeight: 0,
+                          )
+                        : SliverAppBar(
+                            // toolbarHeight:
+                            // Get.width > Constants.webWidth ? 200 : 0,
+                            pinned: true,
+                            floating: true,
+                            backgroundColor: Colors.white,
+                            elevation: 0,
+                            title: const Text(
+                              "Feeds",
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ],
-                          bottom: PreferredSize(
-                            preferredSize: Size(Get.width, 40),
-                            child: Suggessions(
-                              width: width,
+                            actions: [
+                              IconButton(
+                                onPressed: () async {
+                                  if (!await UserFunctions
+                                      .isUserLoggedInFun()) {
+                                    loginFirstDialog(context);
+                                    return;
+                                  }
+                                  Get.to(
+                                    const ChatHomeView(),
+                                  );
+                                },
+                                icon: Icon(
+                                  CupertinoIcons.chat_bubble_2_fill,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ],
+                            bottom: PreferredSize(
+                              preferredSize: Size(Get.width, 40),
+                              child: Suggessions(
+                                width: width,
+                              ),
                             ),
                           ),
-                        ),
-                ];
-              },
-              body: RefreshIndicator(
-                onRefresh: () async {
-                  await vm.getAllPost();
+                  ];
                 },
-                child: vm.isPostFetched.value
-                    ? SizedBox(
-                        width: width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            width < Constants.webWidth
-                                ? const SizedBox()
-                                : Row(
-                                    children: [
-                                      const WebSideBarWidget(),
-                                      Divider(
-                                        color: Colors.grey.shade800,
-                                        thickness: 5,
-                                      )
-                                    ],
-                                  ),
-                            SizedBox(
-                              width: Get.width < Constants.webWidth
-                                  ? width
-                                  : vm.showWebCommentSection
-                                      ? width -
-                                          Constants.commentSectionWidth -
-                                          Constants.sizeBarWidth
-                                      : width - Constants.sizeBarWidth,
-                              child: Center(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical:
-                                          width > Constants.webWidth ? 5 : 20),
-                                  width: Get.width < Constants.mwidth
-                                      ? width
-                                      : 560,
-                                  child: Center(
-                                    child: HomePage(),
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    await vm.getAllPost();
+                  },
+                  child: vm.isPostFetched.value
+                      ? SizedBox(
+                          width: width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              width < Constants.webWidth
+                                  ? const SizedBox()
+                                  : Row(
+                                      children: [
+                                        const WebSideBarWidget(),
+                                        Divider(
+                                          color: Colors.grey.shade800,
+                                          thickness: 5,
+                                        )
+                                      ],
+                                    ),
+                              SizedBox(
+                                width: Get.width < Constants.webWidth
+                                    ? width
+                                    : vm.showWebCommentSection
+                                        ? width -
+                                            Constants.commentSectionWidth -
+                                            Constants.sizeBarWidth
+                                        : width - Constants.sizeBarWidth,
+                                child: Center(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: width > Constants.webWidth
+                                            ? 5
+                                            : 20),
+                                    width: Get.width < Constants.mwidth
+                                        ? width
+                                        : 560,
+                                    child: Center(
+                                      child: HomePage(),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            (!vm.showWebCommentSection || width < 1260)
-                                ? const SizedBox()
-                                : SiedBarCommentSection(
-                                    height: height,
-                                    width: width,
-                                    vm: vm,
-                                    commonVM: commonVM)
-                          ],
-                        ),
-                      )
-                    : vm.isErrorOnFetchingData.value
-                        ? Center(
-                            child: SizedBox(
-                            height: 100,
-                            child: Column(
-                              children: [
-                                const Text(
-                                  "No data found",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextButton(
-                                  style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.blueGrey[800]),
-                                      foregroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white)),
-                                  onPressed: () {
-                                    vm.getAllPost();
-                                  },
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 16),
-                                    child: Text(
-                                      "Try again",
+                              (!vm.showWebCommentSection || width < 1280)
+                                  ? const SizedBox()
+                                  : LayoutBuilder(
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        final screenWidth =
+                                            constraints.maxWidth;
+                                        if (screenWidth < 1280) {
+                                          vm.showWebCommentSection = false;
+                                          vm.update();
+                                        }
+                                        return SiedBarCommentSection(
+                                          height: height,
+                                          width: width,
+                                          vm: vm,
+                                          commonVM: commonVM,
+                                        );
+                                      },
+                                    )
+                            ],
+                          ),
+                        )
+                      : vm.isErrorOnFetchingData.value
+                          ? Center(
+                              child: SizedBox(
+                                height: 100,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      "No data found",
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Colors.blueGrey[800],
+                                        ),
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                          Colors.white,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        vm.getAllPost();
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8.0,
+                                          horizontal: 16,
+                                        ),
+                                        child: Text(
+                                          "Try again",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                          ))
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-              )),
+                ),
+              ),
+            );
+          },
         );
-      });
-    });
+      },
+    );
   }
 }
 

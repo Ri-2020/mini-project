@@ -51,60 +51,52 @@ class SignupVM extends GetxController {
   LocationData? locationData;
   GeoCoder geoCoder = GeoCoder();
 
-  void _determinePosition() async {
-    Location location = Location();
-
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        print("!_serviceEnabled");
-        return;
-      }
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        print("_permissionGranted != PermissionStatus.granted");
-        return;
-      }
-    }
-
-    locationData = await location.getLocation();
-    update();
-
-    // Passed the coordinates of latitude and longitude
-    coordinatesPoints.add(locationData!.longitude!);
-    coordinatesPoints.add(locationData!.longitude!);
-    // final coordinates =
-    //     Coordinates(locationData!.latitude, locationData!.longitude);
-    var address = await geoCoder.getAddressFromLatLng(
-        latitude: locationData!.longitude!,
-        longitude: locationData!.longitude!);
-    var first = address.addressDetails;
-    // on below line we have set the address to string
-    // locality1.text = first.locality.toString();
-    // adminArea1.text = first.adminArea.toString();
-    // postalCode1.text = first.postalCode.toString();
-    locality1.text = first.city.toString();
-    adminArea1.text = first.state.toString();
-    postalCode1.text = first.postcode.toString();
-
-    /// update ui
-
-    /// get continuous location updates
-    // location.onLocationChanged.listen((LocationData currentLocation) {
-    //   // Use current location
-    // });
-
-    /// receive location when application is in background
-    // location.enableBackgroundMode(enable: true);
-  }
+  // void _determinePosition() async {
+  //   Location location = Location();
+  //   bool _serviceEnabled;
+  //   PermissionStatus _permissionGranted;
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       print("!_serviceEnabled");
+  //       return;
+  //     }
+  //   }
+  //   _permissionGranted = await location.hasPermission();
+  //   if (_permissionGranted == PermissionStatus.denied) {
+  //     _permissionGranted = await location.requestPermission();
+  //     if (_permissionGranted != PermissionStatus.granted) {
+  //       print("_permissionGranted != PermissionStatus.granted");
+  //       return;
+  //     }
+  //   }
+  //   locationData = await location.getLocation();
+  //   update();
+  //   // Passed the coordinates of latitude and longitude
+  //   coordinatesPoints.add(locationData!.longitude!);
+  //   coordinatesPoints.add(locationData!.longitude!);
+  //   // final coordinates =
+  //       // Coordinates(locationData!.latitude, locationData!.longitude);
+  //   var address = await geoCoder.getAddressFromLatLng(
+  //       latitude: locationData!.longitude!,
+  //       longitude: locationData!.longitude!);
+  //   var first = address.addressDetails;
+  //   // on below line we have set the address to string
+  //   // locality1.text = first.locality.toString();
+  //   // adminArea1.text = first.adminArea.toString();
+  //   // postalCode1.text = first.postalCode.toString();
+  //   locality1.text = first.city.toString();
+  //   adminArea1.text = first.state.toString();
+  //   postalCode1.text = first.postcode.toString();
+  //   /// update ui
+  //   //get continuous location updates
+  //   location.onLocationChanged.listen((LocationData currentLocation) {
+  //     // Use current location
+  //   });
+  //   // receive location when application is in background
+  //   location.enableBackgroundMode(enable: true);
+  // }
 
   void _findPositionByAddress() async {
     //changing entered user address to coordinates
@@ -118,7 +110,7 @@ class SignupVM extends GetxController {
     debugPrint("coordinates : ${first1.coordinates.latitude}");
   }
 
-  get determinePosition => _determinePosition;
+  // get determinePosition => _determinePosition;
   get findPositionByAddress => _findPositionByAddress;
 
   Future<Map?> userSignup() async {
@@ -140,16 +132,6 @@ class SignupVM extends GetxController {
     }
     Get.snackbar(response["status"], response["message"]);
     return null;
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override

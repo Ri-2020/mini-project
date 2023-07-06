@@ -109,22 +109,22 @@ class WebFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: width > Constants.webWidth
-          ? AppBar(
-              toolbarHeight: 0,
-            )
-          : AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              title: Text(
-                "Evika",
-                style: TextStyle(
-                    color: HexColor('#224957').withOpacity(0.7),
-                    fontFamily: 'LexendDeca',
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
+      // appBar: width > Constants.webWidth
+      //     ? AppBar(
+      //         toolbarHeight: 0,
+      //       )
+      //     : AppBar(
+      //         backgroundColor: Colors.transparent,
+      //         elevation: 0.0,
+      //         title: Text(
+      //           "Evika",
+      //           style: TextStyle(
+      //               color: HexColor('#224957').withOpacity(0.7),
+      //               fontFamily: 'LexendDeca',
+      //               fontSize: 28,
+      //               fontWeight: FontWeight.bold),
+      //         ),
+      //       ),
       body: RefreshIndicator(
         onRefresh: () {
           return Future(() => null);
