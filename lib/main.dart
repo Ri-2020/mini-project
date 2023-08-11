@@ -5,7 +5,6 @@ import 'package:evika/utils/widgets/login_first_dialogbox.dart';
 import 'package:evika/view_models/navigation.dart/navigation_viewmodel.dart';
 import 'package:evika/views/create_post/create_post.dart';
 import 'package:evika/views/profile/profile.dart';
-import 'package:evika/views/signin.dart';
 import 'package:evika/views/trending_view/tranding.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,8 @@ class MyApp extends StatelessWidget {
       // themeMode: ThemeMode.dark,
       // themeMode: ThemeMode.light,
       getPages: AppRotutes.pages,
-      initialRoute: AppRotutes.splashScreen,
+      initialRoute: AppRotutes.signin,
+      // initialRoute: AppRotutes.splashScreen,
     );
   }
 }
