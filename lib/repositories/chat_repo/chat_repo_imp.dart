@@ -13,7 +13,6 @@ class ChatRepoImp extends ChatRepo {
     Map<String, dynamic>? res =
         await chatApiServices.getUserChat(receiverUserId);
     List<ChatModel> chatUsers = [];
-    debugPrint("common Repo Imp $res");
     if (res != null && res.isNotEmpty) {
       for (var i in res["data"]) {
         chatUsers.add(ChatModel.fromJson(jsonEncode(i)));
@@ -27,7 +26,6 @@ class ChatRepoImp extends ChatRepo {
   Future<List<ChatUsers>> getAllChatUsers() async {
     Map<String, dynamic>? res = await chatApiServices.getAllChatUsers();
     List<ChatUsers> chatUsers = [];
-    debugPrint("getAllChatUsers response : $res");
     if (res != null && res.isNotEmpty) {
       for (var i in res["data"]) {
         chatUsers.add(ChatUsers.fromJson(jsonEncode(i)));

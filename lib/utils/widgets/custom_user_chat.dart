@@ -7,44 +7,6 @@ import 'package:evika/views/chat_view/user_Chat_page.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 
-class CustomUser extends StatelessWidget {
-  final ChatUsers userChatModel;
-  final int index;
-  const CustomUser({Key? key, required this.userChatModel, required this.index})
-      : super(key: key);
-
-//   // late  userChatModel sourceChat;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (1 == 1) {
-          Get.to(
-              () => UserChatPage(
-                    isWeb: (MediaQuery.of(context).size.width > 700)
-                        ? true
-                        : false,
-                    receiverId: userChatModel.receiverId,
-                    receiverName: userChatModel.name,
-                  ),
-              arguments: {
-                "receiverUserId": userChatModel.receiverId,
-              },
-              transition: Transition.rightToLeft);
-        }
-      },
-      child: CustomUserCard(
-        isContactPage: false,
-        userChatModel: userChatModel,
-        iconSize: 22,
-        isChatPage: true,
-        fontW: FontWeight.w400,
-      ),
-    );
-  }
-}
-
 class CustomUserCard extends StatelessWidget {
   CustomUserCard({
     Key? key,
@@ -122,6 +84,8 @@ class CustomUserCard extends StatelessWidget {
                   ),
                   isChatPage
                       ? Text(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           userChatModel.lastMessage.isNotEmpty
                               ? userChatModel.lastMessage
                               : "Hello",

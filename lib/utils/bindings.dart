@@ -3,6 +3,7 @@ import 'package:evika/view_models/home_viewmodel.dart/post_viewmodel.dart';
 import 'package:evika/view_models/profile_viewmodels/profile_viewmodel.dart';
 import 'package:evika/view_models/signin_signup_viewmodel.dart/signin_viewmodel.dart';
 import 'package:evika/view_models/signin_signup_viewmodel.dart/signup_viewmodel.dart';
+import 'package:evika/view_models/user_chat_home_vm.dart';
 import 'package:evika/views/create_post/create_post_viewmodel.dart';
 import 'package:evika/views/description/description_viewmodel.dart';
 import 'package:evika/views/mypost/my_post_viewmodel.dart';
@@ -64,5 +65,12 @@ class SettingsBinging extends Bindings {
   @override
   void dependencies() {
     Get.put(SettingVM());
+  }
+}
+
+class ChatBinging extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(UserChatHomeVM());
   }
 }

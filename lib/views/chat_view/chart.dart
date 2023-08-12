@@ -1,6 +1,9 @@
+import 'package:evika/utils/constants.dart';
 import 'package:evika/utils/widgets/custom_user_chat.dart';
 import 'package:evika/view_models/user_chat_home_vm.dart';
+import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:evika/views/chat_view/forward_message_view.dart';
+import 'package:evika/views/chat_view/user_Chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,28 +17,71 @@ class Chats extends StatefulWidget {
 class _ChatsState extends State<Chats> {
   final ScrollController controller = ScrollController();
   UserChatHomeVM userChatHomeVM = Get.find();
+  UserChatVM userChatVM =
+      Get.isRegistered<UserChatVM>() ? Get.find() : Get.put(UserChatVM());
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UserChatHomeVM>(builder: (vm) {
       return Scaffold(
         body: SingleChildScrollView(
           child: ListView.builder(
-            padding: const EdgeInsets.all(0),
-            // controller: widget.controller,
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            // itemCount: widget.userModelChat.length,
-            itemCount: vm.chatUsersList.length,
-            itemBuilder: (context, i) => Padding(
-                padding: EdgeInsets.only(
-                    top: 2,
-                    bottom: i == vm.chatUsersList.length - 1 ? 65.0 : 2.0),
-                child: CustomUser(
-                  userChatModel: vm.chatUsersList[i],
-                  index: i,
-                )),
-          ),
+              padding: const EdgeInsets.all(0),
+              // controller: widget.controller,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              // itemCount: widget.userModelChat.length,
+              itemCount: vm.chatUsersList.length,
+              itemBuilder: (context, i) {
+                if (i > vm.chatUsersList.length - 1) {
+                  return Container();
+                }
+                return Padding(
+                  padding: EdgeInsets.only(
+                      top: 2,
+                      bottom: i == vm.chatUsersList.length - 1 ? 65.0 : 2.0),
+                  child: InkWell(
+                    onTap: () {
+                      if (MediaQuery.of(context).size.width <
+                          Constants.mwidth) {
+                        Get.to(
+                            () => UserChatPage(
+                                  isWeb:
+                                      (MediaQuery.of(context).size.width > 700)
+                                          ? true
+                                          : false,
+                                  receiverId: vm.chatUsersList[i].receiverId,
+                                  receiverName: vm.chatUsersList[i].name,
+                                  i: i,
+                                ),
+                            arguments: {
+                              "receiverUserId": vm.chatUsersList[i].receiverId,
+                            },
+                            transition: Transition.rightToLeft);
+                      } else {
+                        vm.selectedUserForChatWeb = SelectedUserForChatWeb(
+                            name: vm.chatUsersList[i].name,
+                            receiverId: vm.chatUsersList[i].receiverId);
+                        userChatVM.selectedUserForChatWeb =
+                            SelectedUserForChatWeb(
+                                name: vm.chatUsersList[i].name,
+                                receiverId: vm.chatUsersList[i].receiverId);
+                        userChatVM.update();
+                        userChatVM.getUserChat();
+                        vm.update();
+                      }
+                    },
+                    child: CustomUserCard(
+                      isContactPage: false,
+                      userChatModel: vm.chatUsersList[i],
+                      iconSize: 22,
+                      isChatPage: true,
+                      fontW: FontWeight.w400,
+                    ),
+                  ),
+                );
+              }),
         ),
         floatingActionButton: FloatingActionButton(
           // backgroundColor: Theme.of(context).colorScheme.primary,

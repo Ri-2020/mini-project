@@ -1,9 +1,11 @@
+import 'package:evika/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData(
     primaryColor: kPrimaryColor,
     // buttonColor: kPrimaryColor,
+    appBarTheme: appBarTheme(context),
     colorScheme: const ColorScheme.light(
       primary: kPrimaryColor,
       secondary: kPrimaryColor,
@@ -27,6 +29,7 @@ ThemeData darkThemeData(BuildContext context) {
   return ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
     primaryColor: kPrimaryColor,
+    appBarTheme: appBarTheme(context),
     colorScheme: const ColorScheme.dark(),
     indicatorColor: Colors.white,
     splashColor: Colors.white24,
@@ -48,4 +51,10 @@ const kErrorColor = Color(0xFFF03738);
 
 const kDefaultPadding = 20.0;
 
-const appBarTheme = AppBarTheme(centerTitle: false, elevation: 0);
+AppBarTheme appBarTheme(context) => AppBarTheme(
+      centerTitle: false,
+      elevation: 0,
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? AppColors.black
+          : AppColors.white,
+    );

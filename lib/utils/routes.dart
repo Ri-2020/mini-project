@@ -1,6 +1,7 @@
 import 'package:evika/auth/signup.dart';
 import 'package:evika/main.dart';
 import 'package:evika/utils/bindings.dart';
+import 'package:evika/views/chat_view/web_chat_home.dart';
 import 'package:evika/views/create_post/create_post.dart';
 import 'package:evika/views/description/description.dart';
 import 'package:evika/views/mypost/my_post_details.dart';
@@ -23,6 +24,7 @@ class AppRotutes {
   static const splashScreen = '/splashScreen';
   static const postDescription = '/postDescription';
   static const myPostDetails = '/myPostDetails';
+  static const chatWeb = '/chatWeb';
 
   static final pages = [
     GetPage(
@@ -65,6 +67,11 @@ class AppRotutes {
       name: AppRotutes.feed,
       page: () => const FeedView(),
       binding: FeedBinding(),
+    ),
+    GetPage(
+      name: AppRotutes.chatWeb,
+      page: () => const WebChatHomePage(),
+      binding: ChatBinging(),
     ),
     GetPage(
       name: AppRotutes.splashScreen,

@@ -28,8 +28,6 @@ class ProfilePage extends StatelessWidget {
             : AppBar(
                 elevation: 1,
                 title: const Text("My Profile"),
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
                 actions: [
                   TextButton(
                     child: Row(
@@ -92,7 +90,6 @@ class ProfilePage extends StatelessWidget {
                   ),
                 )
               : Container(
-                  color: Colors.white,
                   width: Get.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,7 +202,7 @@ class ProfilePage extends StatelessWidget {
                                   vm.userData?.follower?.length.toString() ??
                                       "0",
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    // color: Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -227,7 +224,7 @@ class ProfilePage extends StatelessWidget {
                                   vm.userData?.following?.length.toString() ??
                                       "0",
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    // color: Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -249,7 +246,7 @@ class ProfilePage extends StatelessWidget {
                                   vm.userData!.likedPosts?.length.toString() ??
                                       "0",
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    // color: Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -443,7 +440,7 @@ class ProfilePage extends StatelessWidget {
                             const Text(
                               "Your Events",
                               style: TextStyle(
-                                color: Colors.black,
+                                // color: Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),

@@ -25,9 +25,6 @@ class PostApiServices {
         "authorization": "Bearer $token",
       });
 
-      debugPrint(
-          "register User in event api response: " + response.body.toString());
-
       if (response.statusCode == 200) {
         Map<String, dynamic> body = apiServices.returnResponse(response);
         return body;

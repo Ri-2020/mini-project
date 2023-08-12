@@ -82,11 +82,11 @@ class _ChatHomeViewState extends State<ChatHomeView>
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.5,
                                 alignment: Alignment.center,
-                                child: Tab(
+                                child: const Tab(
                                   child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: const [
+                                      children: [
                                         Text("CHATS"),
                                         SizedBox(
                                           width: 4,
@@ -115,7 +115,7 @@ class _ChatHomeViewState extends State<ChatHomeView>
                     },
                     body: TabBarView(
                         controller: _tabController,
-                        children: [const Chats(), ProfilePage()]))));
+                        children: const [Chats(), ProfilePage()]))));
       },
     );
   }

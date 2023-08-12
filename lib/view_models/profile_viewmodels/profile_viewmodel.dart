@@ -31,7 +31,7 @@ class ProfileVM extends GetxController {
     setLoading(true);
     debugPrint("function call getuserformsharedprefes");
     var user = await SharedPrefs.getString("user");
-    debugPrint(user);
+
     if (user != null) {
       var userDataMap = jsonDecode(user);
       userData = UserData.fromMap(userDataMap);
@@ -68,7 +68,6 @@ class ProfileVM extends GetxController {
     //     country: "abc address",
     //     zipcode: "abc address",
     //     coordinates: [28.7041, 77.1025]);
-    print("address is ${address.state}");
     nameController.text = userData?.name ?? "";
     bioController.text = userData?.bio ?? "";
     addressController.text = address.address1 ?? address.state;

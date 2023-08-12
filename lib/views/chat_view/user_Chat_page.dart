@@ -3,6 +3,9 @@ import 'package:evika/utils/widgets/OtherSideMsg.dart';
 import 'package:evika/utils/widgets/OwnMsgCard.dart';
 import 'package:evika/utils/widgets/PopUpMenuBtn.dart';
 import 'package:evika/utils/widgets/chat/bottomTextMessaging.dart';
+import 'package:evika/utils/widgets/chat/show_default_chat_screen.dart';
+import 'package:evika/utils/widgets/custom_user_chat.dart';
+import 'package:evika/view_models/user_chat_home_vm.dart';
 import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:evika/views/Individual%20_user_details.dart';
 import 'package:evika/views/chat_view/forward_message_view.dart';
@@ -15,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import "package:evika/data/remote/api_services/post_api_service.dart" as api;
 
+import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 
 class MoreOption {
@@ -37,32 +41,29 @@ class UserChatPage extends StatefulWidget {
     Key? key,
     required this.receiverId,
     required this.receiverName,
-    // required this.i,
+    required this.i,
     this.isWeb,
   }) : super(key: key);
   final String receiverId;
   final String receiverName;
   final bool? isWeb;
-  // final int i;
+  final int i;
 
   @override
   State<UserChatPage> createState() => _UserChatPageState();
 }
 
 class _UserChatPageState extends State<UserChatPage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print("isit chala");
-  //   initSocket();
-  //   focusNode.addListener(() {
-  //     if (focusNode.hasFocus) {
-  //       setState(() {
-  //         showEnojiOption = false;
-  //       });
-  //     }
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // initSocket();
+    vm.selectedUserForChatWeb = SelectedUserForChatWeb(
+        name: widget.receiverName, receiverId: widget.receiverId);
+    vm.update();
+    vm.getUserChat();
+  }
+
   UserChatVM vm = Get.put(UserChatVM());
   // UserChatHomeVM chatHomeVM = Get.put(UserChatHomeVM());
 
@@ -80,147 +81,151 @@ class _UserChatPageState extends State<UserChatPage> {
           vm.showBottomNavigation = false;
           vm.update();
         },
-        child: Stack(
-          children: [
-            // Image.asset(
-            //   "assets/img/whatsappbg.png",
-            //   width: MediaQuery.of(context).size.width,
-            //   height: MediaQuery.of(context).size.height,
-            //   fit: BoxFit.cover,
-            // ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            Scaffold(
-              // backgroundColor: Colors.transparent,
-              appBar: userChatAppBar(context),
-              body: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: WillPopScope(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          controller: vm.scrollController,
-                          // itemCount: messages.length,
-                          itemCount: vm.individualchats.length,
-                          itemBuilder: (context, i) {
-                            if (i == vm.individualchats.length) {
-                              return Container(
-                                height: 60,
-                              );
-                            }
-                            if (vm.individualchats[i].receiverUserId !=
-                                vm.senderUserId) {
-                              return OwnMsgCard(
-                                  chatId: vm.individualchats[i].id,
-                                  text: vm.individualchats[i].message,
-                                  index: i,
-                                  time: vm.convertDateTime(
-                                      vm.individualchats[i].createdAt));
-                            } else {
-                              print(
-                                  "isit chala ${vm.individualchats[i].id}, ${vm.senderUserId}");
-                              return OtherSideMsgCard(
-                                  chatId: vm.individualchats[i].id,
-                                  text: vm.individualchats[i].message,
-                                  time: vm.convertDateTime(
-                                      vm.individualchats[i].createdAt));
-                              // if (vm.messages[i].type == "source") {
-                              //   return OwnMsgCard(
-                              //       text: vm.messages[i].msg,
-                              //       time: vm.messages[i].time);
-                              // } else {
-                              //   return OtherSideMsgCard(
-                              //       text: vm.messages[i].msg,
-                              //       time: vm.messages[i].time);
-                            }
-                          },
-                        ),
-                      ),
-                      vm.showBottomNavigation
-                          ? const SizedBox(
-                              height: 0,
-                            )
-                          : BottomTextMessaging()
-                    ],
+        child: widget.receiverName == "showDefaultVikramNegi"
+            ? const ShowDefaultScreen()
+            : Stack(
+                children: [
+                  // Image.asset(
+                  //   "assets/img/whatsappbg.png",
+                  //   width: MediaQuery.of(context).size.width,
+                  //   height: MediaQuery.of(context).size.height,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.white.withOpacity(0.9),
                   ),
-                  onWillPop: () {
-                    if (vm.showEnojiOption == true) {
-                      setState(() {
-                        vm.showEnojiOption = false;
-                      });
-                    } else {
-                      Navigator.pop(context);
-                    }
-                    return Future.value(false);
-                  },
-                ),
-              ),
-              bottomNavigationBar: vm.showBottomNavigation
-                  ? bottomNavigationMsgOption()
-                  // Container(
-                  //     height: 120,
-                  //     width: Get.width,
-                  //     child: Container(
-                  //       height: 100,
-                  //       width: Get.width * 0.8,
-                  //       decoration: BoxDecoration(
-                  //         color: Colors.white,
-                  //         borderRadius: BorderRadius.circular(10),
-                  //       ),
-                  //       child: Column(
-                  //         children: [
-                  //           const SizedBox(
-                  //             height: 10,
-                  //           ),
-                  //           Center(
-                  //               child: Container(
-                  //             height: 5,
-                  //             width: 50,
-                  //             decoration: BoxDecoration(
-                  //               color: Colors.grey.shade800,
-                  //               borderRadius: BorderRadius.circular(10),
-                  //             ),
-                  //           )),
-                  //           Row(
-                  //             children: [
-                  //               IconButton(
-                  //                   onPressed: () {
-                  //                     vm.deleteChat(vm.selectedChatId);
-                  //                     Navigator.pop(context);
-                  //                   },
-                  //                   icon: const Icon(Icons.delete)),
-                  //               IconButton(
-                  //                   onPressed: () {
-                  //                     Navigator.pop(context);
-                  //                   },
-                  //                   icon: const Icon(Icons.delete)),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   )
-                  : Container(
-                      height: 0,
+                  Scaffold(
+                    // backgroundColor: Colors.transparent,
+                    appBar: userChatAppBar(context),
+                    body: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: WillPopScope(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                controller: vm.scrollController,
+                                // itemCount: messages.length,
+                                itemCount: vm.individualchats.length,
+                                itemBuilder: (context, i) {
+                                  if (i == vm.individualchats.length) {
+                                    return Container(
+                                      height: 60,
+                                    );
+                                  }
+                                  if (vm.individualchats[i].receiverUserId !=
+                                      vm.senderUserId) {
+                                    return OwnMsgCard(
+                                        chatId: vm.individualchats[i].id,
+                                        text: vm.individualchats[i].message,
+                                        index: i,
+                                        time: vm.convertDateTime(
+                                            vm.individualchats[i].createdAt));
+                                  } else {
+                                    print(
+                                        "isit chala ${vm.individualchats[i].id}, ${vm.senderUserId}");
+                                    return OtherSideMsgCard(
+                                        chatId: vm.individualchats[i].id,
+                                        text: vm.individualchats[i].message,
+                                        time: vm.convertDateTime(
+                                            vm.individualchats[i].createdAt));
+                                    // if (vm.messages[i].type == "source") {
+                                    //   return OwnMsgCard(
+                                    //       text: vm.messages[i].msg,
+                                    //       time: vm.messages[i].time);
+                                    // } else {
+                                    //   return OtherSideMsgCard(
+                                    //       text: vm.messages[i].msg,
+                                    //       time: vm.messages[i].time);
+                                  }
+                                },
+                              ),
+                            ),
+                            vm.showBottomNavigation
+                                ? const SizedBox(
+                                    height: 0,
+                                  )
+                                : BottomTextMessaging()
+                          ],
+                        ),
+                        onWillPop: () {
+                          if (vm.showEnojiOption == true) {
+                            setState(() {
+                              vm.showEnojiOption = false;
+                            });
+                          } else {
+                            Navigator.pop(context);
+                          }
+                          return Future.value(false);
+                        },
+                      ),
                     ),
-            ),
-          ],
-        ),
+                    bottomNavigationBar: vm.showBottomNavigation
+                        ? bottomNavigationMsgOption()
+                        // Container(
+                        //     height: 120,
+                        //     width: Get.width,
+                        //     child: Container(
+                        //       height: 100,
+                        //       width: Get.width * 0.8,
+                        //       decoration: BoxDecoration(
+                        //         color: Colors.white,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       child: Column(
+                        //         children: [
+                        //           const SizedBox(
+                        //             height: 10,
+                        //           ),
+                        //           Center(
+                        //               child: Container(
+                        //             height: 5,
+                        //             width: 50,
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.grey.shade800,
+                        //               borderRadius: BorderRadius.circular(10),
+                        //             ),
+                        //           )),
+                        //           Row(
+                        //             children: [
+                        //               IconButton(
+                        //                   onPressed: () {
+                        //                     vm.deleteChat(vm.selectedChatId);
+                        //                     Navigator.pop(context);
+                        //                   },
+                        //                   icon: const Icon(Icons.delete)),
+                        //               IconButton(
+                        //                   onPressed: () {
+                        //                     Navigator.pop(context);
+                        //                   },
+                        //                   icon: const Icon(Icons.delete)),
+                        //             ],
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   )
+                        : Container(
+                            height: 0,
+                          ),
+                  ),
+                ],
+              ),
       );
     });
   }
 
   AppBar userChatAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: widget.isWeb!
-          ? const Color(0xfff0f2f5)
-          // : Theme.of(context).primaryColor,
-          : Colors.grey.shade900,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.black
+          : AppColors.white,
+      foregroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.white
+          : AppColors.black,
       leadingWidth: widget.isWeb! ? 55 : 75,
       toolbarHeight: widget.isWeb! ? 65 : 55,
       titleSpacing: 0,
@@ -238,28 +243,27 @@ class _UserChatPageState extends State<UserChatPage> {
           },
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            // !widget.isWeb!
-            //     ?
-            SizedBox(
-              width: 25,
-              child: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                ),
-              ),
-            )
-            // : Container(width: 1),
-            // GetBuilder<UserChatHomeVM>(builder: (vm) {
-            //   return CircularAvatarWidget(
-            //     isContactPage: true,
-            //     isChatPage: false,
-            //     userChatModel: vm.chatUsersList[widget.i],
-            //     radiusOfAvatar: 20,
-            //   );
-            // })
+            !widget.isWeb!
+                ? SizedBox(
+                    width: 25,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                      ),
+                    ),
+                  )
+                : Container(width: 1),
+            GetBuilder<UserChatHomeVM>(builder: (vm) {
+              return CircularAvatarWidget(
+                isContactPage: true,
+                isChatPage: false,
+                userChatModel: vm.chatUsersList[0],
+                radiusOfAvatar: 20,
+              );
+            })
           ]),
         ),
       ),
@@ -271,9 +275,8 @@ class _UserChatPageState extends State<UserChatPage> {
               ? IconButton(onPressed: () async {}, icon: const Icon(Icons.call))
               : IconButton(
                   onPressed: () async {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.search,
-                    color: widget.isWeb! ? Colors.grey.shade800 : Colors.white,
                   )),
         GetBuilder<UserChatVM>(builder: (vm) {
           return PopupMenuBtn(items: vm.userChatMenuBtn);
@@ -298,19 +301,15 @@ class _UserChatPageState extends State<UserChatPage> {
               widget.receiverName,
               style: TextStyle(
                 fontSize: 18.5,
-                fontWeight: widget.isWeb! ? FontWeight.w100 : FontWeight.bold,
-                color: widget.isWeb! ? Colors.black : Colors.white,
+                fontWeight: widget.isWeb! ? FontWeight.w400 : FontWeight.bold,
               ),
             ),
             Text(
-              widget.isWeb!
-                  ? "Click here for contact info"
-                  : "Last seen today at ",
+              widget.isWeb! ? "Click for more info" : "Last seen today at ",
               // ${vm.chatUsersList[widget.i].lastMessageTime}",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
-                fontWeight: widget.isWeb! ? FontWeight.w200 : FontWeight.w400,
-                color: widget.isWeb! ? Colors.black : Colors.white,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ],

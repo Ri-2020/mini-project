@@ -146,7 +146,7 @@ class CommonVM extends GetxController {
     update();
     try {
       var response = await commonRepoImp.getAndAddComments(postId, null);
-      // debugPrint("Get Comments: response $response");
+      debugPrint("Get Comments: response ${response.length}");
       commentList = response;
       print("get commemts: ${commentList.length}}");
     } catch (e) {
@@ -294,24 +294,24 @@ class CommonVM extends GetxController {
   void otherUsersData(String userId) async {
     userDataLoading = true;
     update();
-    try {
-      Map<String, dynamic>? otherUser =
-          await commonRepoImp.otherUsersData(userId);
-      userDataLoading = false;
+    // try {
+    Map<String, dynamic>? otherUser =
+        await commonRepoImp.otherUsersData(userId);
+    userDataLoading = false;
+    update();
+    if (otherUser != null) {
+      otherUserData = UserData.fromMap(otherUser["data"]);
+
+      otherUserPostList = otherUser["posts"]
+          .map((e) => PostData.fromMap(e))
+          .toList()
+          .cast<PostData>();
       update();
-      if (otherUser != null) {
-        otherUserData = UserData.fromMap(otherUser["data"]);
-        print(otherUser["posts"]);
-        otherUserPostList = otherUser["posts"]
-            .map((e) => PostData.fromMap(e))
-            .toList()
-            .cast<PostData>();
-        update();
-      }
-    } catch (e) {
-      userDataLoading = false;
-      update();
-      print(e);
     }
+    // } catch (e) {
+    //   userDataLoading = false;
+    //   update();
+    //   print(e);
+    // }
   }
 }

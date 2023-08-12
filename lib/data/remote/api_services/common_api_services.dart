@@ -40,7 +40,7 @@ class CommonApiServices extends CommoApiInterface {
   @override
   Future<List>? getAndAddComments(String postId, String? text) async {
     String token = await getToken();
-    // print("token : $token");
+
     final response;
     if (text == null) {
       response = await http.get(
@@ -60,8 +60,7 @@ class CommonApiServices extends CommoApiInterface {
             "comment": text
           });
       Map<String, dynamic> res = jsonDecode(r.body);
-      // print(res["status"]);
-      // print("pppppppppppppppppppppppp");
+
       if (res["status"] == "success") {
         response = await http.get(
           Uri.parse('$baseUrl/api/user/get-comments/$postId'),
@@ -74,13 +73,11 @@ class CommonApiServices extends CommoApiInterface {
         response = r;
       }
     }
-    // print("response :::: ${response.body}");
     if (response.statusCode == 200) {
       List comments = [];
       Map<String, dynamic> res = jsonDecode(response.body);
       comments = res["data"];
 
-      // print("get comment : $comments");
       return comments;
     }
     return [];
@@ -89,7 +86,6 @@ class CommonApiServices extends CommoApiInterface {
   @override
   Future<bool> functionalityComment(String postId, String? text) async {
     String token = await getToken();
-    // print("token : $token");
     final response = await http.post(
         Uri.parse('$baseUrl/api/user/post-comment/$postId'),
         headers: <String, String>{
@@ -98,10 +94,8 @@ class CommonApiServices extends CommoApiInterface {
         body: {
           "comment": text
         });
-    // print("response :::: ${response.body}");
     if (response != null && response.statusCode == 200) {
       Map<String, dynamic> res = jsonDecode(response.body);
-      // print("add comment res : $res");
       return res["success"] == "success" ? true : false;
     }
     return false;
@@ -111,7 +105,6 @@ class CommonApiServices extends CommoApiInterface {
   Future<bool> commentFunctionality(
       String postId, String? type, String commentId) async {
     String token = await getToken();
-    // print("commentId : $commentId");
     final response = await http.post(
         Uri.parse('$baseUrl/api/user/commentfunctionality/$postId'),
         headers: <String, String>{
@@ -121,10 +114,8 @@ class CommonApiServices extends CommoApiInterface {
           "type": type,
           "commentID": commentId
         });
-    print("response :::: ${response.body}");
     if (response != null && response.statusCode == 200) {
       Map<String, dynamic> res = jsonDecode(response.body);
-      print("add comment res : $res");
       return res["success"] == "success" ? true : false;
     }
     return false;
@@ -140,10 +131,8 @@ class CommonApiServices extends CommoApiInterface {
         headers: <String, String>{
           "authorization": "Bearer $token",
         });
-    print("response :::: ${response.body}");
     if (response != null && response.statusCode == 200) {
       Map<String, dynamic> res = jsonDecode(response.body);
-      print("add comment res : $res");
       return res["success"] == "success" ? true : false;
     }
     return false;
@@ -162,9 +151,6 @@ class CommonApiServices extends CommoApiInterface {
         },
       );
 
-      // debugPrint("get user url: $baseUrl/api/user/get-posts/$userId");
-      // debugPrint('get user status code: ${response.statusCode.toString()}');
-      // debugPrint("get user post response: $response");
       if (response.statusCode == 200) {
         // debugPrint(response.body);
         Map<String, dynamic> body = apiServices.returnResponse(response);
@@ -184,7 +170,6 @@ class CommonApiServices extends CommoApiInterface {
     final response = await http.get(
       Uri.parse('$baseUrl/api/account/user-data/$userId'),
     );
-    // print("other user response : ${response.body}");
     if (response.statusCode == 200) {
       Map<String, dynamic> body = apiServices.returnResponse(response);
       return body;

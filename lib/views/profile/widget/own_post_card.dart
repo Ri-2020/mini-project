@@ -46,7 +46,9 @@ class OwnPostCard extends StatelessWidget {
               ),
             ),
 
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light
+                ? AppColors.white
+                : AppColors.black,
             // borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
@@ -176,7 +178,9 @@ class OwnPostCard extends StatelessWidget {
         vertical: 2,
       ),
       decoration: BoxDecoration(
-        color: Color.fromARGB(216, 255, 255, 255),
+        color: Theme.of(Get.context!).brightness == Brightness.light
+            ? AppColors.white
+            : AppColors.black,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

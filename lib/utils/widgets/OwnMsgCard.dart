@@ -1,3 +1,4 @@
+import 'package:evika/utils/colors.dart';
 import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class OwnMsgCard extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
-                  color: const Color(0xffdcf8c6),
+                  color: Color.fromARGB(255, 198, 233, 248),
                   margin: const EdgeInsets.only(top: 15, right: 15),
                   child: Stack(
                     children: [
@@ -50,8 +51,9 @@ class OwnMsgCard extends StatelessWidget {
                           ),
                           child: Text(
                             text,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.darkgrey,
                             ),
                           )),
                       text.length > 30
@@ -67,8 +69,10 @@ class OwnMsgCard extends StatelessWidget {
                             Text(time,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
-                                style: const TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w400)),
+                                style: TextStyle(
+                                    color: AppColors.darkgrey,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400)),
                             const SizedBox(
                               width: 3,
                             ),

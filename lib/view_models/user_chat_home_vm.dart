@@ -1,5 +1,6 @@
 import 'package:evika/models/chat/chat_page_model.dart';
 import 'package:evika/repositories/chat_repo/chat_repo_imp.dart';
+import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,7 @@ class UserChatHomeVM extends GetxController {
   List<ChatUsers> chatUsersList = [];
   bool loading = false;
   ChatRepoImp chatRepoImp = ChatRepoImp();
+  SelectedUserForChatWeb? selectedUserForChatWeb;
 
   void getAllChatUsers() async {
     loading = true;
@@ -25,8 +27,6 @@ class UserChatHomeVM extends GetxController {
 
   // this convert date time to 12 hours format
   String convertDateTime(DateTime dateTime) {
-    debugPrint("Convert Date time:  function Called");
-    debugPrint("dateTime : $dateTime");
     dateTime = dateTime.toUtc().toLocal();
     // String date = dateTime.toString().substring(8, 10);
     // String month = dateTime.toString().substring(5, 7);

@@ -1,3 +1,4 @@
+import 'package:evika/utils/colors.dart';
 import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,8 +70,9 @@ class OtherSideMsgCard extends StatelessWidget {
                       ),
                       child: Text(
                         text,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.darkgrey,
                         ),
                       )),
                   text.length > 30
@@ -84,8 +86,10 @@ class OtherSideMsgCard extends StatelessWidget {
                     child: Text(time,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400)),
+                        style: TextStyle(
+                            color: AppColors.darkgrey,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400)),
                   ),
                 ],
               ),

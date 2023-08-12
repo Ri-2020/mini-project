@@ -56,7 +56,7 @@ class UserData {
   String? mobile;
   String username;
   List<double>? location;
-  String password;
+
   String id;
   String? jti;
   String? profileImage;
@@ -89,7 +89,6 @@ class UserData {
     this.mobile,
     required this.username,
     required this.location,
-    required this.password,
     required this.id,
     this.jti,
     this.profileImage,
@@ -125,7 +124,6 @@ class UserData {
       'mobile': mobile,
       'username': username,
       'location': location,
-      'password': password,
       'id': id,
       'jti': jti,
       'profileImage': profileImage,
@@ -166,7 +164,6 @@ class UserData {
       location: map['location'] != null
           ? List<double>.from(map['location']['coordinates'])
           : [00, 00],
-      password: map['password'],
       id: map['_id'],
       jti: map['jti'] != null ? map['jti'] as String : null,
       profileImage: map['profileImage'] != null

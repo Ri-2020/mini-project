@@ -5,4 +5,5 @@ class Constants {
   static double sizeBarWidth = 250;
   static double webWidth = 820;
   static double commentSectionWidth = 450;
+  static double commentWebSectionWidth = 1280;
 }

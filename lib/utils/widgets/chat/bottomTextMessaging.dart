@@ -1,4 +1,5 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:evika/utils/constants.dart';
 // import 'package:evika/utils/widgets/MoreOptionToSend.dart';
 import 'package:evika/view_models/user_chat_viewmodal.dart';
 import 'package:evika/views/chat_view/user_Chat_page.dart';
@@ -17,9 +18,9 @@ class BottomTextMessaging extends StatelessWidget {
       child: GetBuilder<UserChatVM>(builder: (vm) {
         return SizedBox(
           // height: widget.isWeb! ? 70 : 500,
-          // width: widget.isWeb!
-          //     ? MediaQuery.of(context).size.width - 400
-          //     : MediaQuery.of(context).size.width - 55,
+          width: MediaQuery.of(context).size.width > Constants.mwidth
+              ? MediaQuery.of(context).size.width - 400
+              : MediaQuery.of(context).size.width - 55,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -29,8 +30,7 @@ class BottomTextMessaging extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width - 55,
+                    Expanded(
                       child: Card(
                         margin:
                             const EdgeInsets.only(left: 4, right: 2, bottom: 6),
@@ -87,11 +87,6 @@ class BottomTextMessaging extends StatelessWidget {
                         child: IconButton(
                             onPressed: () {
                               if (vm.sendButton) {
-                                vm.scrollController.animateTo(
-                                    vm.scrollController.position
-                                        .maxScrollExtent,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeOut);
                                 // vm.sendMessage(vm.txtController.text,
                                 //     vm.senderUserId!, widget.receiverId);
 

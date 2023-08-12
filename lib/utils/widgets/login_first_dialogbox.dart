@@ -1,3 +1,4 @@
+import 'package:evika/utils/routes.dart';
 import 'package:evika/views/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,7 +50,7 @@ void loginFirstDialog(context) {
                     child: Center(
                       child: InkWell(
                           onTap: () {
-                            Get.off(() => SigninPage());
+                            Get.offAndToNamed(AppRotutes.signin);
                           },
                           child: Text("Login",
                               style: TextStyle(

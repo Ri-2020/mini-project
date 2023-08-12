@@ -3,10 +3,16 @@ import 'package:get/get.dart';
 
 class NavigationController extends GetxController {
   RxInt index = 0.obs;
+  RxInt webidx = 0.obs;
   bool isUserLoggedIn = false;
 
   void changeIndex(int index) {
     this.index.value = index;
+    update();
+  }
+
+  void changeWebIndex(int index) {
+    webidx.value = index;
     update();
   }
 

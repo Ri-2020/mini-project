@@ -12,6 +12,10 @@ abstract class AppColors {
   static const Color greenColor = Color.fromRGBO(78, 229, 196, 1);
   static const Color redColor = Color.fromRGBO(255, 0, 0, 1);
   static const Color white = Colors.white;
+  static Color black = Colors.grey.shade900;
+  static Color lightblack = Colors.grey.shade300;
+  static Color grey = Colors.grey.shade500;
+  static Color darkgrey = Colors.grey.shade800;
 }
 
 class LightAppColors extends AppColors {

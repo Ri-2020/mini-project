@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:evika/models/chat/chat_page_model.dart';
 import 'package:evika/repositories/chat_repo/chat_repo_imp.dart';
+import 'package:evika/utils/show_snackbar.dart';
+import 'package:evika/view_models/user_chat_home_vm.dart';
 import 'package:evika/views/chat_view/user_Chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,18 @@ import 'package:evika/models/chat/chat_model.dart';
 import "package:evika/data/remote/api_services/post_api_service.dart" as api;
 // import 'package:web_socket_channel/io.dart';
 // import 'package:web_socket_channel/status.dart' as status;
+
+class SelectedUserForChatWeb {
+  String name;
+  String? profileImage;
+  String receiverId;
+  int? i;
+  SelectedUserForChatWeb(
+      {required this.name,
+      this.profileImage,
+      required this.receiverId,
+      this.i});
+}
 
 class UserChatVM extends GetxController {
   List<String> userChatMenuBtn = [
@@ -69,6 +83,7 @@ class UserChatVM extends GetxController {
   final TextEditingController txtController = TextEditingController();
   late io.Socket socket;
   String? senderUserId;
+  SelectedUserForChatWeb? selectedUserForChatWeb;
 
   @override
   void onInit() {
@@ -76,7 +91,7 @@ class UserChatVM extends GetxController {
     print("isit chala");
     initSocket();
     // connectSocket();
-    getUserChat();
+
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         showEnojiOption = false;
@@ -151,20 +166,17 @@ class UserChatVM extends GetxController {
   }
 
   ChatRepoImp chatRepoImp = ChatRepoImp();
+
   List<ChatModel> individualchats = [];
 
   void getUserChat() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // String? resId = await SharedPrefs().getString("receiverUserId");
-    String receiverUserId = Get.arguments["receiverUserId"];
-    // String receiverUserId = "636fad6c94ce27828d7cec4e";
+    String receiverUserId =
+        selectedUserForChatWeb?.receiverId ?? Get.arguments["receiverUserId"];
     senderUserId = sharedPreferences.getString("userId")!;
-    // receiverUserId = resId;
     update();
-    // receiverUserId = "636fad6c94ce27828d7cec4e";
     List<ChatModel>? chatModelList =
         await chatRepoImp.getUserChat(receiverUserId);
-    print("chat list : $chatModelList");
     individualchats = chatModelList ?? [];
     update();
   }
@@ -211,8 +223,9 @@ class UserChatVM extends GetxController {
   void sendMessageToUser({String? receiverId}) async {
     ChatModel chatModel = ChatModel(
         senderUserId: senderUserId!,
-        receiverUserId:
-            receiverId != null ? receiverId : Get.arguments["receiverUserId"],
+        receiverUserId: receiverId ??
+            selectedUserForChatWeb?.receiverId ??
+            Get.arguments["receiverUserId"],
         message: txtController.text,
         createdAt: DateTime.now(),
         id: senderUserId!,
@@ -228,8 +241,11 @@ class UserChatVM extends GetxController {
     print(individualchats.length);
     receiverId == null ? individualchats.add(chatModel) : null;
     update();
-    String receiverUserId =
-        receiverId != null ? receiverId : Get.arguments["receiverUserId"];
+    scrollController.animateTo(scrollController.position.maxScrollExtent + 75,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    String receiverUserId = receiverId ??
+        selectedUserForChatWeb?.receiverId ??
+        Get.arguments["receiverUserId"];
     String message = receiverId != null ? frowardedText : txtController.text;
     txtController.clear();
     print("message : $message");
@@ -243,11 +259,9 @@ class UserChatVM extends GetxController {
       individualchats.add(newChat);
       update();
     }
-    if (res["status"] == "success") {
-      Get.snackbar("success", "Message sent successfully");
-    } else {
-      Get.snackbar("error", "Message not sent");
-    }
+    // if(res["status"] == "failed"){
+    showSnackbar(res["message"] ?? "Error in sending message");
+    // }
     receiverId = null;
     update();
   }

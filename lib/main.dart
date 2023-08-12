@@ -1,8 +1,11 @@
 import 'package:evika/appTheme.dart';
 import 'package:evika/utils/constants.dart';
 import 'package:evika/utils/routes.dart';
+import 'package:evika/utils/sharedPreferenced.dart';
 import 'package:evika/utils/widgets/login_first_dialogbox.dart';
 import 'package:evika/view_models/navigation.dart/navigation_viewmodel.dart';
+import 'package:evika/views/chat_view/chart_view_home.dart';
+import 'package:evika/views/chat_view/web_chat_home.dart';
 import 'package:evika/views/create_post/create_post.dart';
 import 'package:evika/views/profile/profile.dart';
 import 'package:evika/views/trending_view/tranding.dart';
@@ -31,15 +34,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      // darkTheme: darkThemeData(context),
+      darkTheme: darkThemeData(context),
       theme: lightThemeData(context),
       scrollBehavior: const ScrollBehavior(
           androidOverscrollIndicator: AndroidOverscrollIndicator.stretch),
       // themeMode: ThemeMode.dark,
-      // themeMode: ThemeMode.light,
+      themeMode: ThemeMode.light,
       getPages: AppRotutes.pages,
-      initialRoute: AppRotutes.signin,
-      // initialRoute: AppRotutes.splashScreen,
+      // initialRoute: AppRotutes.chatWeb,
+      initialRoute: AppRotutes.splashScreen,
     );
   }
 }
@@ -51,12 +54,22 @@ class ScreenNavigate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    List<Widget> screens = <Widget>[
-      const FeedView(),
-      WebFilterWidget(pageWidget: const TrandingPage()),
-      WebFilterWidget(pageWidget: CreatePostPage()),
-      WebFilterWidget(pageWidget: const ProfilePage()),
-    ];
+    List<Widget> screens = width > Constants.webWidth
+        ? [
+            const FeedView(),
+            WebFilterWidget(pageWidget: const TrandingPage()),
+            WebFilterWidget(pageWidget: CreatePostPage()),
+            WebFilterWidget(pageWidget: const ProfilePage()),
+            WebFilterWidget(
+                pageWidget: const WebChatHomePage(),
+                isFullPage: width > Constants.mwidth ? true : false),
+          ]
+        : [
+            const FeedView(),
+            WebFilterWidget(pageWidget: const TrandingPage()),
+            WebFilterWidget(pageWidget: CreatePostPage()),
+            WebFilterWidget(pageWidget: const ProfilePage()),
+          ];
     return GetBuilder<NavigationController>(builder: (nv) {
       return Scaffold(
         body: screens.elementAt(nv.index.value),
@@ -102,29 +115,31 @@ class ScreenNavigate extends StatelessWidget {
 }
 
 class WebFilterWidget extends StatelessWidget {
-  WebFilterWidget({super.key, required this.pageWidget});
+  WebFilterWidget(
+      {super.key, required this.pageWidget, this.isFullPage = false});
   Widget pageWidget;
+  bool isFullPage;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: width > Constants.webWidth
-          ? AppBar(
-              toolbarHeight: 0,
-            )
-          : AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              title: Text(
-                "Evika",
-                style: TextStyle(
-                    color: HexColor('#224957').withOpacity(0.7),
-                    fontFamily: 'LexendDeca',
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
+      // appBar: width > Constants.webWidth
+      //     ? AppBar(
+      //         toolbarHeight: 0,
+      //       )
+      //     : AppBar(
+      //         backgroundColor: Colors.transparent,
+      //         elevation: 0.0,
+      //         title: Text(
+      //           "Evika",
+      //           style: TextStyle(
+      //               color: HexColor('#224957').withOpacity(0.7),
+      //               fontFamily: 'LexendDeca',
+      //               fontSize: 28,
+      //               fontWeight: FontWeight.bold),
+      //         ),
+      //       ),
       body: RefreshIndicator(
         onRefresh: () {
           return Future(() => null);
@@ -151,7 +166,9 @@ class WebFilterWidget extends StatelessWidget {
                     : width - Constants.sizeBarWidth,
                 child: Center(
                   child: SizedBox(
-                    width: Get.width < Constants.mwidth ? width : 560,
+                    width: (Get.width < Constants.mwidth || isFullPage)
+                        ? width
+                        : 560,
                     child: Center(
                       child: pageWidget,
                     ),

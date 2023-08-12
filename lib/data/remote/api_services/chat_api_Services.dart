@@ -77,7 +77,7 @@ class ChatApiServices extends ChatApiInterface {
   ) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString("token")!;
-    // // print("chatId : $chatId");
+
     String api = "$baseUrl/api/user/chat/deleteChat/$chatId";
     var response = await http.get(
       Uri.parse(api),

@@ -35,7 +35,7 @@ class PostVM extends GetxController {
   String? userId;
   String checkBase = "Post View Model: ";
   bool showWebCommentSection = false;
-  int selectedPostForComment = 0;
+  int selectedPostForComment = -1;
   ScrollController commentScrollController = ScrollController();
 
   logout() async {
@@ -118,7 +118,6 @@ class PostVM extends GetxController {
       isPostFetched.value = true;
       update();
     }
-    debugPrint("${checkBase}Post List Length${postList.length}");
     return postList;
   }
 
@@ -133,8 +132,6 @@ class PostVM extends GetxController {
       if (data != null) {
         debugPrint("getAllpost function Called");
         List<dynamic> list = data['data'];
-
-        debugPrint(data.toString());
 
         response = ApiResponce.completed(data);
         update();
