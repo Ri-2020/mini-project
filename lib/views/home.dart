@@ -46,415 +46,484 @@ class _HomePageState extends State<HomePage> {
                     preferredSize: const Size(400, 40),
                     child: Suggessions(width: 560),
                   )),
-          body: ListView.separated(
-
-              // reverse: true,
-              physics: const BouncingScrollPhysics(),
-              // physics: const NeverScrollableScrollPhysics(),
-              itemCount: vm.postList.length,
-              separatorBuilder: ((context, i) {
-                return SizedBox(
-                  height: i == vm.postList.length - 1 ? 75 : 20,
-                );
-              }),
-              itemBuilder: (context, i) {
-                return Container(
-                    width: Get.width < Constants.mwidth ? Get.width : 440,
-                    margin: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                        top: width > Constants.webWidth && i == 0 ? 20 : 0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+          body: !vm.isPostFetched.value
+              ? Expanded(
+                  child: ListView.builder(
+                    // shrinkWrap: true,
+                    itemBuilder: (context, i) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    commonVM
-                                        .otherUsersData(vm.postList[i].userId!);
-                                    Get.to(() => OtherProfilePage());
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: NetworkImage(
-                                        // 'https://www.w3schools.com/howto/img_avatar.png'
-                                        vm.postList[i].profileImage ??
-                                            'https://www.w3schools.com/howto/img_avatar.png'),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                ),
-                                // CircleAvatar(
-                                //   radius: 25,
-                                //   backgroundColor: Colors.white,
-                                //   child: IconButton(
-                                //       onPressed: () async {
-                                //         vm.likePost(vm.postList[i].id);
-                                //         // commonVM.update();
-                                //       },
-                                //       icon: Icon(
-                                //         commonVM.isLikedPost(vm.postList[i].id!)
-                                //             ? CupertinoIcons.heart_fill
-                                //             : CupertinoIcons.heart_fill,
-                                //         color: commonVM
-                                //                 .isLikedPost(vm.postList[i].id!)
-                                //             ? Colors.red
-                                //             : Colors.grey.shade300,
-                                //         size: 30,
-                                //       )),
-                                // ),
-                                // const SizedBox(
-                                //   height: 10,
-                                // ),
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.white,
-                                  child: IconButton(
-                                      onPressed: () async {
-                                        if (!await UserFunctions
-                                            .isUserLoggedInFun()) {
-                                          loginFirstDialog(context);
-                                          return;
-                                        }
-                                        vm.likePost(vm.postList[i].id);
-                                      },
-                                      icon: Icon(
-                                        commonVM.isLikedPost(vm.postList[i].id!)
-                                            ? CupertinoIcons.heart_fill
-                                            : Icons.favorite_border,
-                                        color: commonVM
-                                                .isLikedPost(vm.postList[i].id!)
-                                            ? Colors.pink
-                                            : Colors.grey.shade600,
-                                        size: 30,
-                                      )),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.white,
-                                  child: IconButton(
-                                    onPressed: () async {
-                                      await Share.share(
-                                          "Hii! I am Joining this Event I want you to be part of this");
-                                    },
-                                    icon: Icon(
-                                      CupertinoIcons.arrowshape_turn_up_right,
-                                      color: Colors.grey.shade600,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.white,
-                                  child: IconButton(
-                                    onPressed: () async {
-                                      commonVM.getComments(
-                                          postId: vm.postList[i].id!);
-
-                                      if (width < Constants.webWidth) {
-                                        bottomModelWidget(context, vm, i);
-                                      } else if (width > Constants.webWidth &&
-                                          width <
-                                              Constants
-                                                  .commentWebSectionWidth) {
-                                        bottomModelWebCommentWidget(
-                                            context, vm, i, width, height);
-                                      } else {
-                                        if (vm.selectedPostForComment == i &&
-                                            vm.showWebCommentSection == true) {
-                                          return;
-                                        }
-                                        vm.showWebCommentSection = true;
-                                        vm.selectedPostForComment = i;
-
-                                        vm.update();
-                                      }
-                                    },
-                                    icon: Icon(
-                                      Icons.comment,
-                                      color: Colors.grey.shade600,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.white,
-                                  child: IconButton(
-                                    onPressed: () async {},
-                                    icon: Icon(
-                                      Icons.notifications_none_outlined,
-                                      color: Colors.grey.shade600,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ),
+                                CustomShimmer(
+                                    width: 50, height: 50, radius: 25),
+                                SizedBox(height: 30),
+                                CustomShimmer(
+                                    width: 40, height: 40, radius: 25),
+                                SizedBox(height: 10),
+                                CustomShimmer(
+                                    width: 40, height: 40, radius: 25),
+                                SizedBox(height: 10),
+                                CustomShimmer(
+                                    width: 40, height: 40, radius: 25),
+                                SizedBox(height: 10),
+                                CustomShimmer(
+                                    width: 40, height: 40, radius: 25),
+                                SizedBox(height: 10),
                               ],
                             ),
+                            const SizedBox(width: 15),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CustomShimmer(
+                                    width: 100, height: 10, radius: 5),
+                                const SizedBox(height: 4),
+                                const CustomShimmer(
+                                    width: 70, height: 10, radius: 5),
+                                const SizedBox(height: 2),
+                                const CustomShimmer(
+                                    width: 70, height: 10, radius: 5),
+                                const SizedBox(height: 10),
+                                CustomShimmer(
+                                    width: Get.width < Constants.mwidth
+                                        ? Get.width
+                                        : 440,
+                                    height: 300,
+                                    radius: 10),
+                              ],
+                            )
                           ],
                         ),
-                        InkWell(
-                          onTap: () async {
-                            Get.toNamed(
-                              AppRotutes.postDescription,
-                              arguments: {
-                                "post": vm.postList[i],
-                                "tag": i.toString(),
-                                "index": i,
-                                "userId": vm.userId,
-                              },
-                            );
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      );
+                    },
+                    itemCount: 5,
+                  ),
+                )
+              : ListView.separated(
+
+                  // reverse: true,
+                  physics: const BouncingScrollPhysics(),
+                  // physics: const NeverScrollableScrollPhysics(),
+                  itemCount: vm.postList.length,
+                  separatorBuilder: ((context, i) {
+                    return SizedBox(
+                      height: i == vm.postList.length - 1 ? 75 : 20,
+                    );
+                  }),
+                  itemBuilder: (context, i) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRotutes.postDescription,
+                            arguments: {
+                              "post": vm.postList[i],
+                              "tag": i.toString(),
+                              "index": i,
+                              "userId": vm.userId,
+                            },
+                          );
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            width:
+                                Get.width < Constants.mwidth ? Get.width : 440,
+                            margin: const EdgeInsets.only(
+                              left: 5,
+                              right: 5,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
+                                    Column(
                                       children: [
-                                        Text(
-                                          vm.postList[i].name!,
-                                          style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
+                                        GestureDetector(
+                                          onTap: () {
+                                            commonVM.otherUsersData(
+                                                vm.postList[i].userId!);
+                                            Get.to(
+                                                () => const OtherProfilePage());
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 30,
+                                            backgroundImage: NetworkImage(
+                                                // 'https://www.w3schools.com/howto/img_avatar.png'
+                                                vm.postList[i].profileImage ??
+                                                    'https://www.w3schools.com/howto/img_avatar.png'),
+                                          ),
                                         ),
                                         const SizedBox(
-                                          width: 4,
+                                          height: 30,
                                         ),
-                                        const Icon(
-                                          Icons.verified,
-                                          size: 22,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          '@${vm.postList[i].username}',
-                                          style: const TextStyle(fontSize: 15),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white),
+                                          child: Column(
+                                            children: [
+                                              IconButton(
+                                                  onPressed: () async {
+                                                    if (!await UserFunctions
+                                                        .isUserLoggedInFun()) {
+                                                      loginFirstDialog(context);
+                                                      return;
+                                                    }
+                                                    vm.likePost(
+                                                        vm.postList[i].id);
+                                                  },
+                                                  icon: Icon(
+                                                    commonVM.isLikedPost(
+                                                            vm.postList[i].id!)
+                                                        ? CupertinoIcons
+                                                            .heart_fill
+                                                        : Icons.favorite_border,
+                                                    color: commonVM.isLikedPost(
+                                                            vm.postList[i].id!)
+                                                        ? Colors.pink
+                                                        : Colors.grey.shade600,
+                                                    size: 30,
+                                                  )),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await Share.share(
+                                                      "Hii! I am Joining this Event I want you to be part of this");
+                                                },
+                                                icon: Icon(
+                                                  CupertinoIcons
+                                                      .arrowshape_turn_up_right,
+                                                  color: Colors.grey.shade600,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  commonVM.getComments(
+                                                      postId:
+                                                          vm.postList[i].id!);
+
+                                                  if (width <
+                                                      Constants.webWidth) {
+                                                    bottomModelWidget(
+                                                        context, vm, i);
+                                                  } else if (width >
+                                                          Constants.webWidth &&
+                                                      width <
+                                                          Constants
+                                                              .commentWebSectionWidth) {
+                                                    bottomModelWebCommentWidget(
+                                                        context,
+                                                        vm,
+                                                        i,
+                                                        width,
+                                                        height);
+                                                  } else {
+                                                    if (vm.selectedPostForComment ==
+                                                            i &&
+                                                        vm.showWebCommentSection ==
+                                                            true) {
+                                                      return;
+                                                    }
+                                                    vm.showWebCommentSection =
+                                                        true;
+                                                    vm.selectedPostForComment =
+                                                        i;
+
+                                                    vm.update();
+                                                  }
+                                                },
+                                                icon: Icon(
+                                                  Icons.comment,
+                                                  color: Colors.grey.shade600,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {},
+                                                icon: Icon(
+                                                  Icons
+                                                      .notifications_none_outlined,
+                                                  color: Colors.grey.shade600,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    RichText(
-                                      text: TextSpan(
-                                        // text: 'The FIFA World Cup Qatar 2022™',
-                                        text: vm.postList[i].title,
-                                        style: TextStyle(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? AppColors.white
-                                              : AppColors.black,
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      // style: TextStyle(fontSize: 18),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    SizedBox(
-                                      width: Get.width > Constants.mwidth
-                                          ? 480
-                                          : Get.width - 80,
-                                      child: Stack(
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          RichText(
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: showMore ? 100 : 3,
-                                            text: TextSpan(
-                                              text: vm.postList[i].description!
-                                                          .length >
-                                                      117
-                                                  ? "${vm.postList[i].description.toString().substring(0, 117)}..."
-                                                  : vm.postList[i].description
-                                                      .toString(),
-                                              children: [
-                                                TextSpan(
-                                                  text: showMore
-                                                      ? vm
-                                                                  .postList[i]
-                                                                  .description!
-                                                                  .length >
-                                                              117
-                                                          ? vm.postList[i]
-                                                              .description
-                                                              .toString()
-                                                              .substring(
-                                                                  117,
-                                                                  vm
-                                                                          .postList[
-                                                                              i]
-                                                                          .description!
-                                                                          .length -
-                                                                      1)
-                                                          : ""
-                                                      : "",
-                                                  style: const TextStyle(
-                                                    // color: Colors.black,
+                                          Row(
+                                            children: [
+                                              Text(
+                                                vm.postList[i].name!,
+                                                style: const TextStyle(
                                                     fontSize: 15,
-                                                  ),
-                                                ),
-                                              ],
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              const Icon(
+                                                Icons.verified,
+                                                size: 22,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                '@${vm.postList[i].username}',
+                                                style: const TextStyle(
+                                                    fontSize: 15),
+                                              ),
+                                            ],
+                                          ),
+                                          RichText(
+                                            text: TextSpan(
+                                              // text: 'The FIFA World Cup Qatar 2022™',
+                                              text: vm.postList[i].title,
                                               style: TextStyle(
-                                                fontSize: 15,
                                                 color: Theme.of(context)
                                                             .brightness ==
                                                         Brightness.dark
                                                     ? AppColors.white
                                                     : AppColors.black,
-                                                // fontWeight: FontWeight.w500,
+                                                fontSize: 17,
                                               ),
                                             ),
                                             // style: TextStyle(fontSize: 18),
                                           ),
-                                          // Text(
-                                          //   // "This is a record of France's results at the FIFA World Cup.",
-                                          //   vm.postList[i].description!.length > 50
-                                          //       ? vm.postList[i].description
-                                          //           .toString()
-                                          //           .substring(0, 50)
-                                          //       : vm.postList[i].description
-                                          //           .toString(),
-                                          //   softWrap: true,
-                                          //   style: const TextStyle(
-                                          //     color: Colors.black,
-                                          //     fontSize: 17,
-                                          //   ),
-                                          // ),
-                                          // showMore
-                                          // ? Text(
-                                          //     vm.postList[i].description!
-                                          //                 .length >
-                                          //             50
-                                          //         ? vm.postList[i].description
-                                          //             .toString()
-                                          //             .substring(
-                                          //                 50,
-                                          //                 vm
-                                          //                         .postList[i]
-                                          //                         .description!
-                                          //                         .length -
-                                          //                     1)
-                                          //         : "",
-                                          //     style:
-                                          //         const TextStyle(fontSize: 15),
-                                          //   )
-                                          // ? const Text(
-                                          //     "This is a record of France's results at the FIFA World Cup. France was one of the four European teams that participated at the inaugural World Cup in 1930 and have appeared in 15 FIFA World Cups, tied for the sixth most of any country.",
-                                          //     style: TextStyle(fontSize: 15),
-                                          //   )
-                                          // : const SizedBox(),
-                                          vm.postList[i].description!.length >
-                                                  90
-                                              ? Positioned(
-                                                  bottom: -5,
-                                                  right: 15,
-                                                  child: Container(
-                                                    // color: Colors.white,
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    height: 24,
-                                                    width: 65,
-                                                    child: Container(
-                                                      color: Colors.white24,
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            showMore =
-                                                                !showMore;
-                                                          });
-                                                        },
-                                                        child: Text(
-                                                          showMore
-                                                              ? 'less'
-                                                              : "more",
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 15,
-                                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          SizedBox(
+                                            width: Get.width > Constants.mwidth
+                                                ? 480
+                                                : Get.width - 80,
+                                            child: Stack(
+                                              children: [
+                                                RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: showMore ? 100 : 3,
+                                                  text: TextSpan(
+                                                    text: vm
+                                                                .postList[i]
+                                                                .description!
+                                                                .length >
+                                                            117
+                                                        ? "${vm.postList[i].description.toString().substring(0, 117)}..."
+                                                        : vm.postList[i]
+                                                            .description
+                                                            .toString(),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: showMore
+                                                            ? vm
+                                                                        .postList[
+                                                                            i]
+                                                                        .description!
+                                                                        .length >
+                                                                    117
+                                                                ? vm.postList[i]
+                                                                    .description
+                                                                    .toString()
+                                                                    .substring(
+                                                                        117,
+                                                                        vm.postList[i].description!.length -
+                                                                            1)
+                                                                : ""
+                                                            : "",
+                                                        style: const TextStyle(
+                                                          // color: Colors.black,
+                                                          fontSize: 15,
                                                         ),
                                                       ),
+                                                    ],
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Theme.of(context)
+                                                                  .brightness ==
+                                                              Brightness.dark
+                                                          ? AppColors.white
+                                                          : AppColors.black,
+                                                      // fontWeight: FontWeight.w500,
                                                     ),
                                                   ),
-                                                )
-                                              : const SizedBox(),
+                                                  // style: TextStyle(fontSize: 18),
+                                                ),
+                                                // Text(
+                                                //   // "This is a record of France's results at the FIFA World Cup.",
+                                                //   vm.postList[i].description!.length > 50
+                                                //       ? vm.postList[i].description
+                                                //           .toString()
+                                                //           .substring(0, 50)
+                                                //       : vm.postList[i].description
+                                                //           .toString(),
+                                                //   softWrap: true,
+                                                //   style: const TextStyle(
+                                                //     color: Colors.black,
+                                                //     fontSize: 17,
+                                                //   ),
+                                                // ),
+                                                // showMore
+                                                // ? Text(
+                                                //     vm.postList[i].description!
+                                                //                 .length >
+                                                //             50
+                                                //         ? vm.postList[i].description
+                                                //             .toString()
+                                                //             .substring(
+                                                //                 50,
+                                                //                 vm
+                                                //                         .postList[i]
+                                                //                         .description!
+                                                //                         .length -
+                                                //                     1)
+                                                //         : "",
+                                                //     style:
+                                                //         const TextStyle(fontSize: 15),
+                                                //   )
+                                                // ? const Text(
+                                                //     "This is a record of France's results at the FIFA World Cup. France was one of the four European teams that participated at the inaugural World Cup in 1930 and have appeared in 15 FIFA World Cups, tied for the sixth most of any country.",
+                                                //     style: TextStyle(fontSize: 15),
+                                                //   )
+                                                // : const SizedBox(),
+                                                vm.postList[i].description!
+                                                            .length >
+                                                        90
+                                                    ? Positioned(
+                                                        bottom: -5,
+                                                        right: 15,
+                                                        child: Container(
+                                                          // color: Colors.white,
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          height: 24,
+                                                          width: 65,
+                                                          child: Container(
+                                                            color:
+                                                                Colors.white24,
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  showMore =
+                                                                      !showMore;
+                                                                });
+                                                              },
+                                                              child: Text(
+                                                                showMore
+                                                                    ? 'less'
+                                                                    : "more",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 15,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : const SizedBox(),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 20,
+                                    Container(
+                                      // color: Colors.red,
+                                      child: Column(children: [
+                                        Container(
+                                          width: Get.width > Constants.mwidth
+                                              ? 440
+                                              : Get.width - 70,
+                                          // : Get.width * 0.82,
+                                          constraints: const BoxConstraints(
+                                            // minHeight: 5.0,
+                                            // minWidth: 5.0,
+                                            maxHeight: 500.0,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            color: Colors.black,
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Get.to(
+                                                () => ShowFiles(
+                                                  tag: i.toString(),
+                                                  file:
+                                                      vm.postList[i].image![0],
+                                                ),
+                                              );
+                                            },
+                                            child: Hero(
+                                              tag: i.toString(),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: vm
+                                                        .postList[i].image![0],
+                                                    fit: BoxFit.cover,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            const CustomShimmer(
+                                                      height: 500,
+                                                      width: double.infinity,
+                                                    ),
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
                                     ),
                                   ],
                                 ),
-                              ),
-                              Container(
-                                // color: Colors.red,
-                                child: Column(children: [
-                                  Container(
-                                    width: Get.width > Constants.mwidth
-                                        ? 440
-                                        : Get.width - 70,
-                                    // : Get.width * 0.82,
-                                    constraints: const BoxConstraints(
-                                      // minHeight: 5.0,
-                                      // minWidth: 5.0,
-                                      maxHeight: 500.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Colors.black,
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.to(
-                                          () => ShowFiles(
-                                            tag: i.toString(),
-                                            file: vm.postList[i].image![0],
-                                          ),
-                                        );
-                                      },
-                                      child: Hero(
-                                        tag: i.toString(),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  vm.postList[i].image![0],
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  showPlaceHolderImage(),
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ));
-              }),
+                              ],
+                            )),
+                      ),
+                    );
+                  }),
         );
       });
     });
@@ -587,7 +656,7 @@ class _HomePageState extends State<HomePage> {
                                               commonVM.commentList.isNotEmpty
                                                   ? Container(
                                                       margin: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           vertical: 10,
                                                           horizontal: 10),
                                                       child: Row(
@@ -1350,7 +1419,7 @@ class _SuggessionsState extends State<Suggessions> {
             ),
             child: InkWell(
                 onTap: () {},
-                child: Icon(
+                child: const Icon(
                   CupertinoIcons.slider_horizontal_3,
                   size: 20,
                 )),

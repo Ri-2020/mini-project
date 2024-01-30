@@ -77,7 +77,9 @@ class MyPostDetails extends StatelessWidget {
                                               fit: BoxFit.cover,
                                               imageUrl: e,
                                               placeholder: (context, url) =>
-                                                  showPlaceHolderImage(),
+                                                  CustomShimmer(
+                                                      width: double.infinity,
+                                                      height: 200),
                                               errorWidget:
                                                   (context, url, error) =>
                                                       const Icon(Icons.error),

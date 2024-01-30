@@ -89,7 +89,8 @@ class OwnPostCard extends StatelessWidget {
                       imageUrl: postData.image![0],
                       width: Get.width,
                       alignment: Alignment.bottomCenter,
-                      placeholder: (context, url) => showPlaceHolderImage(),
+                      placeholder: (context, url) =>
+                          CustomShimmer(width: double.infinity, height: 200),
                     ),
                   ),
                 ),

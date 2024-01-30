@@ -2,6 +2,7 @@ import 'package:evika/appTheme.dart';
 import 'package:evika/auth/signup.dart';
 import 'package:evika/main.dart';
 import 'package:evika/utils/constants.dart';
+import 'package:evika/utils/placeHolderImage.dart';
 import 'package:evika/utils/user_functionality.dart';
 import 'package:evika/utils/widgets/login_first_dialogbox.dart';
 import 'package:evika/utils/widgets/sidebar_comment_section.dart';
@@ -80,7 +81,7 @@ class FeedView extends StatelessWidget {
                   onRefresh: () async {
                     await vm.getAllPost();
                   },
-                  child: vm.isPostFetched.value
+                  child: !vm.isErrorOnFetchingData.value
                       ? SizedBox(
                           width: width,
                           child: Row(
@@ -142,63 +143,57 @@ class FeedView extends StatelessWidget {
                             ],
                           ),
                         )
-                      : vm.isErrorOnFetchingData.value
-                          ? Center(
-                              child: SizedBox(
-                                height: 100,
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      "No data found",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          ),
-                                        ),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                          Colors.blueGrey[800],
-                                        ),
-                                        foregroundColor:
-                                            MaterialStateProperty.all(
-                                          Colors.white,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        vm.getAllPost();
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 8.0,
-                                          horizontal: 16,
-                                        ),
-                                        child: Text(
-                                          "Try again",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                      : Center(
+                          child: SizedBox(
+                            height: 100,
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "No data found",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Colors.blueGrey[800],
+                                    ),
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    vm.getAllPost();
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.0,
+                                      horizontal: 16,
+                                    ),
+                                    child: Text(
+                                      "Try again",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
+                          ),
+                        ),
                 ),
               ),
             );
@@ -266,7 +261,7 @@ class WebSideBarWidget extends StatelessWidget {
             }
             if (MediaQuery.of(context).size.width > Constants.webWidth) {
               // nv.changeIndex(4);
-              Get.to(() => WebChatHomePage());
+              Get.to(() => const WebChatHomePage());
               return;
             } else {
               // nv.changeIndex(0);
@@ -288,7 +283,7 @@ class WebSideBarWidget extends StatelessWidget {
               Get.to(() => SettingScreen());
             },
             child: WebSideBar(title: 'Settings', icon: Icons.settings)),
-        Spacer(),
+        const Spacer(),
         InkWell(
           onTap: () {
             if (Theme.of(context).brightness == Brightness.light) {

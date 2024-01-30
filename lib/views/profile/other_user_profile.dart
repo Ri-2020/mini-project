@@ -71,7 +71,9 @@ class OtherProfilePage extends StatelessWidget {
                                         ),
                                       ),
                                       placeholder: (context, url) =>
-                                          showPlaceHolderImage(),
+                                          CustomShimmer(
+                                              width: double.infinity,
+                                              height: 230),
                                     ),
                                   ),
                                   SizedBox(
@@ -103,7 +105,8 @@ class OtherProfilePage extends StatelessWidget {
                                                 ),
                                               ),
                                               placeholder: (context, url) =>
-                                                  showPlaceHolderImage(),
+                                                  CustomShimmer(
+                                                      width: 100, height: 100),
                                             ),
                                           ),
                                         ),

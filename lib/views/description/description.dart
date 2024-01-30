@@ -57,8 +57,8 @@ class Description extends StatelessWidget {
                                 child: CachedNetworkImage(
                                   imageUrl: vm.pvm.postList[vm.index].image![0],
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      showPlaceHolderImage(),
+                                  placeholder: (context, url) => CustomShimmer(
+                                      width: double.infinity, height: 200),
                                 ))),
                         const SizedBox(
                           height: 10,
@@ -98,7 +98,8 @@ class Description extends StatelessWidget {
                                                   .profileImage!,
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
-                                                  showPlaceHolderImage(),
+                                                  CustomShimmer(
+                                                      width: 100, height: 100),
                                             ),
                                           ),
                                         ),
